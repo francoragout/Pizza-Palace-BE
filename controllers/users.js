@@ -4,12 +4,13 @@ const bcrypt = require('bcrypt');
 const Key = process.env.SECRET_KEY
 
 const getUser = async (req, res) => {
+  const { id } = req.body
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
+    const user = await User.findById(id);
+    if (!id) {
       return res.status(404).json({ mensaje: "El usuario no existe" });
     }
-    return res.status(200).json(user);
+    return res.status(200).json({user});
 
   } catch (error) {
     console.log(error);
@@ -17,7 +18,7 @@ const getUser = async (req, res) => {
   }
 }
 
-const getUsers = async (res) => {
+const getUsers = async (req, res) => {
   try {
     const users = await User.find();
     return res.status(200).json(users);
@@ -29,9 +30,10 @@ const getUsers = async (res) => {
 }
 
 const deleteUser = async (req, res) => {
+  const { id } = req.body
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
+    await User.findByIdAndDelete(id);
+    if (!id) {
       return res.status(404).json({ mensaje: "El usuario no existe" });
     }
     return res.status(200).json({ mensaje: "El usuario se eliminó correctamente" });
@@ -148,10 +150,8 @@ const createUser = async (req, res) => {
       role
     });
 
-    // Save the user to the database
     await newUser.save();
 
-    // Return the new user in the response
     return res.status(201).json({ user: newUser });
   } catch (error) {
     console.log(error);
