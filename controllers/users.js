@@ -14,7 +14,7 @@ const getUser = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ mensaje: "Error al obtener el usuario" });
+    return res.status(500).json({ mensaje: "Error al obtener usuario" });
   }
 }
 
@@ -39,7 +39,7 @@ const deleteUser = async (req, res) => {
     return res.status(200).json({ mensaje: "El usuario se eliminó correctamente" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ mensaje: "Error al eliminar el usuario" });
+    return res.status(500).json({ mensaje: "Error al eliminar usuario" });
   }
 }
 
@@ -71,7 +71,7 @@ const signupUser = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Error al registrar el usuario" });
+    return res.status(500).json({ message: "Error al registrar usuario" });
   }
 }
 
@@ -82,26 +82,30 @@ const loginUser = async(req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ message: "Email o contraseña incorrectos" });
+      return res.status(401).json({ message: "Los datos ingresados son icorrectos" });
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).json({ message: "Email o contraseña incorrectos" });
+      return res.status(401).json({ message: "Los datos ingresados son icorrectos" });
+    }
+
+    if (user.status !== 'active') {
+      return res.status(403).json({ message: "El usuario no está activo" });
     }
 
     const token = jwt.sign({ userId: user._id }, Key);
-
     return res.status(200).json({ user, token });
+
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Error logging in" });
+    return res.status(500).json({ message: "Error al loguear usuario" });
   }
 };
 
 const updateUser = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
   const { name, lastname, email, password } = req.body;
 
   try {
