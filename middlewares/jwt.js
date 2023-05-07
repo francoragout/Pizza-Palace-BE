@@ -1,20 +1,20 @@
-const { json } = require('express');
 const jwt = require('jsonwebtoken');
-const Key = process.env.SECRET_KEY
+const Key = process.env.SECRET_KEY;
 
-const jwtValidator = async(req, res, next) =>{
-  const {accessToken} = req.body;
-  try {
-    const verify = jwt.verify(accessToken, Key);
+const jwtValidator = (req, res, next) => {
+  const accessToken = req.headers.authorization;
 
-    if (verify) {
-      return next();
-    }
-  } catch (error) {
-    res,json({
-      mensjae: "No autorizado"
-    })
+  if (!accessToken) {
+    return res.status(401).json({ message: "No autorizado" });
   }
-}
 
-module.exports = { jwtValidator }
+  try {
+    const decoded = jwt.verify(accessToken, Key);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "No autorizado" });
+  }
+};
+
+module.exports = { jwtValidator };
