@@ -6,6 +6,7 @@ const menuSchema = new Schema({
   description: String,
   price: Number,
   category: String,
+  size: String,
   status: String
 });
 

@@ -42,8 +42,8 @@ const deleteMenu = async (req, res) => {
 
 const createMenu = async (req, res) => {
   try {
-    const { name, description, price, category, status } = req.body;
-    const menu = new Menu({ name, description, price, category, status });
+    const { name, description, price, category, size, status } = req.body;
+    const menu = new Menu({ name, description, price, category, size, status });
     await menu.save();
     res.status(201).json(menu);
 
@@ -54,10 +54,10 @@ const createMenu = async (req, res) => {
 
 const updateMenu = async (req, res) => {
   const { id } = req.body
-  const { name, description, price, category, status } = req.body;
+  const { name, description, price, category, size, status } = req.body;
   
   try {
-    const menu = await Menu.findByIdAndUpdate(id, { name, description, price, category, status }, { new: true });
+    const menu = await Menu.findByIdAndUpdate(id, { name, description, price, category, size, status }, { new: true });
 
     if (!menu) {
       return res.status(404).json({ message: 'Menu no encontrado' });
