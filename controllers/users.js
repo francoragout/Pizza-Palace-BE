@@ -106,8 +106,7 @@ const loginUser = async(req, res) => {
 
 const updateUser = async (req, res) => {
   const { id } = req.body;
-  const { name, lastname, email, password } = req.body;
-
+  
   try {
     const user = await User.findById(id);
 
@@ -115,12 +114,16 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    user.name = name || user.name;
-    user.lastname = lastname || user.lastname;
-    user.email = email || user.email;
+    user.name = req.body.name || user.name;
+    user.lastname = req.body.lastname || user.lastname;
+    user.email = req.body.email || user.email;
+    user.status = req.body.status || user.status;
+    user.role = req.body.role || user.role;
 
-    if (password) {
-      user.password = password;
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      user.password = hashedPassword;
     }
 
     await user.save();
