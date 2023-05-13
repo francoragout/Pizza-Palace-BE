@@ -7,7 +7,6 @@ const requestSchema = new Schema({
   phone: Number,
   items: Array,
   status: String,
-  payment: String,
   total: Number
 })
 

@@ -42,8 +42,16 @@ const deleteRequest = async (req, res) => {
 
 const createRequest = async (req, res) => {
   try {
-    const { user, address, phone, items, status, payment, total } = req.body;
-    const request = new Request({ user, address, phone, items, status, payment, total});
+    const { user, address, phone, items, total } = req.body;
+    const request = new Request({
+      user, 
+      address, 
+      phone, 
+      items, 
+      status: "preparing", 
+      total
+    });
+
     await request.save();
     res.status(201).json(request)
     

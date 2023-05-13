@@ -42,8 +42,16 @@ const deleteMenu = async (req, res) => {
 
 const createMenu = async (req, res) => {
   try {
-    const { name, description, price, category, size, status } = req.body;
-    const menu = new Menu({ name, description, price, category, size, status });
+    const { name, description, price, category, size } = req.body;
+    const menu = new Menu({
+      name,
+      description, 
+      price, 
+      category, 
+      size, 
+      status: "active" 
+    });
+
     await menu.save();
     res.status(201).json(menu);
 
