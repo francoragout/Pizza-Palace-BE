@@ -60,12 +60,12 @@ const updateRequest = async (req, res) => {
     const request = await Request.findByIdAndUpdate(id, { status }, { new: true });
 
     if (!request) {
-      return res.status(404).json({ message: 'Menu no encontrado' });
+      return res.status(404).json({ message: 'Pedido no encontrado' });
     }
     res.status(200).json(request);
 
   } catch (error) {
-    res.status(500).json({ message: "Error al modificar menú"});
+    res.status(500).json({ message: "Error al modificar pedido"});
   }
 };
 
