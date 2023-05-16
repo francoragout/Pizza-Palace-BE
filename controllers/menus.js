@@ -49,7 +49,7 @@ const createMenu = async (req, res) => {
       price, 
       category, 
       size, 
-      status: "active" 
+      status: "activo" 
     });
 
     await menu.save();

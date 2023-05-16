@@ -42,13 +42,15 @@ const deleteRequest = async (req, res) => {
 
 const createRequest = async (req, res) => {
   try {
-    const { user, address, phone, items, total } = req.body;
+    const { user, address, phone, items, total, date, hour } = req.body;
     const request = new Request({
+      hour,
+      date,
       user, 
       address, 
       phone, 
       items, 
-      status: "preparing", 
+      status: "Pendiente", 
       total
     });
 

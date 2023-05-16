@@ -60,7 +60,7 @@ const signupUser = async (req, res) => {
       lastname,
       email,
       password: encryptedPassword,
-      status: "active",
+      status: "activo",
       role: "user"
     });
 
@@ -91,7 +91,7 @@ const loginUser = async(req, res) => {
       return res.status(401).json({ message: "Los datos ingresados son icorrectos" });
     }
 
-    if (user.status !== 'active') {
+    if (user.status !== 'activo') {
       return res.status(403).json({ message: "El usuario no está activo" });
     }
 
@@ -105,33 +105,19 @@ const loginUser = async(req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { id } = req.body;
-  
+  const { id, status } = req.body;
+
   try {
-    const user = await User.findById(id);
+    const user = await User.findByIdAndUpdate(id, { status }, { new: true });
 
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    user.name = req.body.name || user.name;
-    user.lastname = req.body.lastname || user.lastname;
-    user.email = req.body.email || user.email;
-    user.status = req.body.status || user.status;
-    user.role = req.body.role || user.role;
-
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
-      user.password = hashedPassword;
-    }
-
-    await user.save();
-
     return res.status(200).json({ user });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Error al modificar usuario" });
+    return res.status(500).json({ message: "Error al modificar el estado del usuario" });
   }
 };
 

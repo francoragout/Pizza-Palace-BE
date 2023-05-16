@@ -1,7 +1,7 @@
 const express = require('express');
 const route = express.Router();
 const { jwtValidator } = require('../middlewares/jwt');
-const { signupUser, deleteUser, getUser, createUser, loginUser, getUsers, updateUser } = require('../controllers/users');
+const { signupUser, deleteUser, getUser, createUser, loginUser, getUsers, updateUser,  } = require('../controllers/users');
 
 route.post('/create-user', createUser)
 route.post('/signup-user', signupUser)
