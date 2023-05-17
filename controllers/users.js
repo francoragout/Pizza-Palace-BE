@@ -44,7 +44,7 @@ const deleteUser = async (req, res) => {
 }
 
 const signupUser = async (req, res) => {
-  const { name, lastname, email, password } = req.body;
+  const { name, lastname, email, password, role } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -61,7 +61,7 @@ const signupUser = async (req, res) => {
       email,
       password: encryptedPassword,
       status: "activo",
-      role: "user"
+      role
     });
 
     await newUser.save();
@@ -121,45 +121,13 @@ const updateUser = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
-  const { name, lastname, email, password, status, role } = req.body;
-
-  try {
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      return res.status(400).json({ message: "El usuario ya existe" });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({
-      name,
-      lastname,
-      email,
-      password: hashedPassword,
-      status,
-      role
-    });
-
-    await newUser.save();
-
-    return res.status(201).json({ user: newUser });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Error al crear usuario" });
-  }
-};
-
 module.exports = {
   getUser,
   getUsers,
   signupUser,
   deleteUser,
   loginUser,
-  updateUser,
-  createUser
+  updateUser
 }
 
 
